@@ -1,0 +1,30 @@
+{
+  TMatrixD A(4,4);
+  A(0,0)=2.0;
+  A(0,1)=0.0;
+  A(0,2)=0.0;
+  A(0,3)=0.0;
+  A(1,3)=0.0;
+  A(1,2)=1.0;
+  A(1,1)=1.0;
+  A(1,0)=0.0;
+  A(2,0)=0.0;
+  A(2,1)=1.0;
+  A(2,2)=1.0;
+  A(2,3)=0.0;
+  A(3,3)=2.0;
+  A(3,2)=0.0;
+  A(3,1)=0.0;
+  A(3,0)=0.0;
+  printf("Original matrix A:\n");
+  A.Print();
+  TMatrixDEigen eigen(A);
+  TMatrixD Pinv = eigen.GetEigenVectors();
+  TMatrixD P = eigen.GetEigenVectors();
+  printf("Eigenvectors P:\n");
+  Pinv.Print();
+  Pinv.Invert();
+  TMatrixD diagonalized = Pinv*A*P;
+  printf("Diagonalized matrix:\n");
+  diagonalized.Print();
+}
