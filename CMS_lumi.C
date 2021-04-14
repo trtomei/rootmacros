@@ -2,7 +2,7 @@
 #include <iostream>
 
 void 
-CMS_lumi( TVirtualPad* pad, int iPeriod, int iPosX, bool writeExtraText, TString extraText)
+CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 {            
   bool outOfFrame    = false;
   if( iPosX/10==0 ) 
@@ -50,114 +50,118 @@ CMS_lumi( TVirtualPad* pad, int iPeriod, int iPosX, bool writeExtraText, TString
       lumiText += " (7 TeV)";
     }
   else if ( iPeriod==4 )
+      {
+          lumiText += lumi_13TeV;
+          lumiText += " (13 TeV)";
+      }
+  else if ( iPeriod==5 )
     {
-      lumiText += lumi_13TeV;
-      lumiText += " (13 TeV)";
+      lumiText += "PU 200, 14 TeV";
     }
   else if ( iPeriod==7 )
-    { 
-      if( outOfFrame ) lumiText += "#scale[0.85]{";
-      lumiText += lumi_13TeV; 
-      lumiText += " (13 TeV)";
-      lumiText += " + ";
-      lumiText += lumi_8TeV; 
-      lumiText += " (8 TeV)";
-      lumiText += " + ";
-      lumiText += lumi_7TeV;
-      lumiText += " (7 TeV)";
-      if( outOfFrame) lumiText += "}";
-    }
+      {
+          if( outOfFrame ) lumiText += "#scale[0.85]{";
+          lumiText += lumi_13TeV;
+          lumiText += " (13 TeV)";
+          lumiText += " + ";
+          lumiText += lumi_8TeV;
+          lumiText += " (8 TeV)";
+          lumiText += " + ";
+          lumiText += lumi_7TeV;
+          lumiText += " (7 TeV)";
+          if( outOfFrame) lumiText += "}";
+      }
   else if ( iPeriod==12 )
-    {
-      lumiText += "8 TeV";
-    }
+      {
+          lumiText += "8 TeV";
+      }
   else if ( iPeriod==0 )
-    {
-      lumiText += lumi_sqrtS;
-    }
-   
-  std::cout << lumiText << endl;
+      {
+          lumiText += lumi_sqrtS;
+      }
 
-  TLatex latex;
-  latex.SetNDC();
-  latex.SetTextAngle(0);
-  latex.SetTextColor(kBlack);    
+std::cout << lumiText << endl;
 
-  float extraTextSize = extraOverCmsTextSize*cmsTextSize;
+TLatex latex;
+latex.SetNDC();
+latex.SetTextAngle(0);
+latex.SetTextColor(kBlack);
 
-  latex.SetTextFont(42);
-  latex.SetTextAlign(31); 
-  latex.SetTextSize(lumiTextSize*t);    
-  latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText);
+float extraTextSize = extraOverCmsTextSize*cmsTextSize;
 
-  if( outOfFrame )
-    {
-      latex.SetTextFont(cmsTextFont);
-      latex.SetTextAlign(11); 
-      latex.SetTextSize(cmsTextSize*t);    
-      latex.DrawLatex(l,1-t+lumiTextOffset*t,cmsText);
-    }
-  
-  pad->cd();
+latex.SetTextFont(42);
+latex.SetTextAlign(31);
+latex.SetTextSize(lumiTextSize*t);
+latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText);
 
-  float posX_=0;
-  if( iPosX%10<=1 )
+if( outOfFrame )
     {
-      posX_ =   l + relPosX*(1-l-r);
+        latex.SetTextFont(cmsTextFont);
+        latex.SetTextAlign(11);
+        latex.SetTextSize(cmsTextSize*t);
+        latex.DrawLatex(l,1-t+lumiTextOffset*t,cmsText);
     }
-  else if( iPosX%10==2 )
+
+pad->cd();
+
+float posX_=0;
+if( iPosX%10<=1 )
     {
-      posX_ =  l + 0.5*(1-l-r);
+        posX_ =   l + relPosX*(1-l-r);
     }
-  else if( iPosX%10==3 )
+ else if( iPosX%10==2 )
+     {
+         posX_ =  l + 0.5*(1-l-r);
+     }
+ else if( iPosX%10==3 )
+     {
+         posX_ =  1-r - relPosX*(1-l-r);
+     }
+float posY_ = 1-t - relPosY*(1-t-b);
+if( !outOfFrame )
     {
-      posX_ =  1-r - relPosX*(1-l-r);
+        if( drawLogo )
+            {
+                posX_ =   l + 0.045*(1-l-r)*W/H;
+                posY_ = 1-t - 0.045*(1-t-b);
+                float xl_0 = posX_;
+                float yl_0 = posY_ - 0.15;
+                float xl_1 = posX_ + 0.15*H/W;
+                float yl_1 = posY_;
+                TASImage* CMS_logo = new TASImage("CMS-BW-label.png");
+                TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
+                pad_logo->Draw();
+                pad_logo->cd();
+                CMS_logo->Draw("X");
+                pad_logo->Modified();
+                pad->cd();
+            }
+        else
+            {
+                latex.SetTextFont(cmsTextFont);
+                latex.SetTextSize(cmsTextSize*t);
+                latex.SetTextAlign(align_);
+                latex.DrawLatex(posX_, posY_, cmsText);
+                if( writeExtraText )
+                    {
+                        latex.SetTextFont(extraTextFont);
+                        latex.SetTextAlign(align_);
+                        latex.SetTextSize(extraTextSize*t);
+                        latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText);
+                    }
+            }
     }
-  float posY_ = 1-t - relPosY*(1-t-b);
-  if( !outOfFrame )
-    {
-      if( drawLogo )
-	{
-	  posX_ =   l + 0.045*(1-l-r)*W/H;
-	  posY_ = 1-t - 0.045*(1-t-b);
-	  float xl_0 = posX_;
-	  float yl_0 = posY_ - 0.15;
-	  float xl_1 = posX_ + 0.15*H/W;
-	  float yl_1 = posY_;
-	  TASImage* CMS_logo = new TASImage("CMS-BW-label.png");
-	  TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
-	  pad_logo->Draw();
-	  pad_logo->cd();
-	  CMS_logo->Draw("X");
-	  pad_logo->Modified();
-	  pad->cd();
-	}
-      else
-	{
-	  latex.SetTextFont(cmsTextFont);
-	  latex.SetTextSize(cmsTextSize*t);
-	  latex.SetTextAlign(align_);
-	  latex.DrawLatex(posX_, posY_, cmsText);
-	  if( writeExtraText ) 
-	    {
-	      latex.SetTextFont(extraTextFont);
-	      latex.SetTextAlign(align_);
-	      latex.SetTextSize(extraTextSize*t);
-	      latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText);
-	    }
-	}
-    }
-  else if( writeExtraText )
-    {
-      if( iPosX==0) 
-	{
-	  posX_ =   l +  relPosX*(1-l-r);
-	  posY_ =   1-t+lumiTextOffset*t;
-	}
-      latex.SetTextFont(extraTextFont);
-      latex.SetTextSize(extraTextSize*t);
-      latex.SetTextAlign(align_);
-      latex.DrawLatex(posX_, posY_, extraText);      
-    }
-  return;
+ else if( writeExtraText )
+     {
+         if( iPosX==0)
+             {
+                 posX_ =   l +  relPosX*(1-l-r);
+                 posY_ =   1-t+lumiTextOffset*t;
+             }
+         latex.SetTextFont(extraTextFont);
+         latex.SetTextSize(extraTextSize*t);
+         latex.SetTextAlign(align_);
+         latex.DrawLatex(posX_, posY_, extraText);
+     }
+return;
 }

@@ -249,6 +249,17 @@ void histogramPrint(const TH1* histo) {
   }
 }
 
+void detailedHistogramPrint(const TH1* histo) {
+  int nbins = histo->GetNbinsX();
+  for(int i=1; i<=nbins; ++i) {
+    double content = histo->GetBinContent(i);
+    double lowEdge = histo->GetBinLowEdge(i);
+    double highEdge = lowEdge+histo->GetBinWidth(i);
+    std::cout << "Bin " << i << " [" << lowEdge << "," << 
+      highEdge << "]\t" << histo->GetBinContent(i) << std::endl;
+  }
+}
+
 void graphPrint(const TGraph* graph) {
   int nbins = graph->GetN();
   for(int i=0; i!=nbins; ++i) {

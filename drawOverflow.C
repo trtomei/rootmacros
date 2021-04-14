@@ -8,7 +8,7 @@ TH1F * DrawOverflow(TH1F *h)
   xbins[nx]=xbins[nx-1]+h->GetBinWidth(nx);
   char *tempName= new char[strlen(h->GetName())+10];
   sprintf(tempName,"%swtOverFlow",h->GetName());
-  // Book a temporary histogram having ab extra bin for overflows
+  // Book a temporary histogram having an extra bin for overflows
   TH1F *htmp = new TH1F(tempName, h->GetTitle(), nx, xbins);
   // Reset the axis labels
   htmp->SetXTitle(h->GetXaxis()->GetTitle());

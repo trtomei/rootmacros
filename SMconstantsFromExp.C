@@ -3,7 +3,7 @@
 #include <TMath.h>
 
 void SMconstants(double GF=1.16637E-5, double alpha=1.0/137.036, double mz=91.1876, double mH=125.0) {
- 
+
   double v = sqrt(1.0/(sqrt(2.0)*GF));
   double pi = TMath::Pi();
   double e = sqrt(4.0*alpha*pi);
@@ -124,4 +124,27 @@ double weightedAverage(double x1, double s1, double x2, double s2) {
   double sm = sqrt(1/(w1+w2));
   std::cout << "Weighted average: " << xm << " +/- " << sm << std::endl;
   return sm;
+}
+
+double lifetimeFromSigma(double sigmaInGeV) {
+    double sigmaIneV = sigmaInGeV * 1E9;
+    double hbar = 6.582119569E-16; // eV*second;
+    double c = TMath::C(); // meters/second
+    double tau = hbar/sigmaIneV;
+    double tauc = tau*c;
+    double taucInmm = tauc*1000;
+    std::cout << "tau = " << tau << std::endl;
+    std::cout << "tauc in meters = " << tauc << std::endl;
+    std::cout << "tauc in mm = " << taucInmm << std::endl;
+    return tau;
+}
+
+double sigmaFromTOF(double TOFInmm) {
+    double hbar = 6.582119569E-16; // eV*second;
+    double c = TMath::C(); // meters/second;
+    double tauc = TOFInmm/1000;
+    double tau = tauc/c;
+    double sigmaIneV = hbar/tau;
+    double sigmaInGeV = sigmaIneV / 1E9;
+    return sigmaInGeV;
 }
