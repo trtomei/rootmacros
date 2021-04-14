@@ -29,8 +29,8 @@ float relExtraDY = 1.2;
 // ratio of "CMS" and extra text size
 float extraOverCmsTextSize = 0.76;
 
-TString Phase2Sim_rate_200 = "7.5 #times 10^{34}/cm^{2}/s, PU 200 (14 TeV)";
-TString Phase2Sim_rate_140 = "5.0 #times 10^{34}/cm^{2}/s, PU 140 (14 TeV)";
+TString Phase2Sim_rate_200 = "7.5 #upoint 10^{34} cm^{-2} s^{-1}, PU 200 (14 TeV)";
+TString Phase2Sim_rate_140 = "5.0 #dot 10^{34} cm^{-2} s^{-1}, PU 140 (14 TeV)";
 TString Phase2Sim_200 = "PU 200 (14 TeV)";
 TString Phase2Sim_140 = "PU 140 (14 TeV)";
 TString lumi_13TeV = "137 fb^{-1}";
