@@ -11,8 +11,8 @@
 TString cmsText = "CMS";
 float cmsTextFont = 61;  // default is helvetic-bold
 
-bool writeExtraText = false;
-TString extraText = "Preliminary";
+bool writeExtraText = true;
+TString extraText = "Phase-2 Simulation";
 float extraTextFont = 52;  // default is helvetica-italics
 
 // text sizes and text offsets with respect to the top frame
@@ -29,6 +29,8 @@ float relExtraDY = 1.2;
 // ratio of "CMS" and extra text size
 float extraOverCmsTextSize = 0.76;
 
+TString Phase2Sim_rate_200 = "7.5 #times 10^{34}/cm^{2}/s, PU 200 (14 TeV)";
+TString Phase2Sim_rate_140 = "5.0 #times 10^{34}/cm^{2}/s, PU 140 (14 TeV)";
 TString Phase2Sim_200 = "PU 200 (14 TeV)";
 TString Phase2Sim_140 = "PU 140 (14 TeV)";
 TString lumi_13TeV = "137 fb^{-1}";
@@ -104,10 +106,14 @@ void CMS_lumi(TPad* pad, int iPeriod, int iPosX) {
       lumiText += "}";
   } else if (iPeriod == 12) {
     lumiText += "8 TeV";
-  } else if (iPeriod == 98) {
+  } else if (iPeriod == 96) {
     lumiText += Phase2Sim_140;
-  } else if (iPeriod == 99) {
+  } else if (iPeriod == 97) {
+    lumiText += Phase2Sim_rate_140;
+  } else if (iPeriod == 98) {
     lumiText += Phase2Sim_200;
+  } else if (iPeriod == 99) {
+    lumiText += Phase2Sim_rate_200;
   } else if (iPeriod == 0) {
     lumiText += lumi_sqrtS;
   }
